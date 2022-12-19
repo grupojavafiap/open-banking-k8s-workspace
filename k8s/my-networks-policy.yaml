@@ -7,7 +7,7 @@ spec:
     - from:
         - podSelector:
             matchLabels:
-              io.kompose.network/my-networks: "true"
+              role: "true"
   podSelector:
     matchLabels:
-      io.kompose.network/my-networks: "true"
+      role: "true"

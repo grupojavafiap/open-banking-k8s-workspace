@@ -1,15 +1,15 @@
-## Trabalho de CONTAINERS E VIRTUALIZATION
+## Trabalho de MICROSERVICE DEVELOPMENT TRABALHO 2
 
-Projeto evolucao do [Trabalho 2 do Microservice](https://github.com/grupojavafiap/open-banking-workspace).
+Projeto evolucao do Trabalho 2 do Microservice.
 
 ### k8s
 
 Yamls de configuracao estao na pasta /k8s.
 
 
-### Desenho da solução
+### Topologia da solução
 
-![Open Banking - Compartilhamento de Dados](./ms_fiap.drawio.png "Open Banking - Compartilhamento de Dados")
+![Open Banking - Compartilhamento de Dados](./cv_fiap.drawio.png "Open Banking - Compartilhamento de Dados")
 
 ### Tecnologias utilizadas
 
@@ -24,15 +24,29 @@ Yamls de configuracao estao na pasta /k8s.
 - Docker
 
 ### Rodando com k8s
-- Para executar com k8s:
+
+## Tutorial
+
+Utilizamos o [KIND](https://kind.sigs.k8s.io/). Ferramenta que auxilia na execução de clusters Kubernetes locais usando “nós” de contêiner Docker.
+
+- Com o KIND instalado, executar o comando abaixo para criar um cluster:
+
+```
+$ kind create cluster
+```
+
+- Utilizamos o MetalLB para obter o servico do tipo loadbalancer, para configuração executar:
+-- Aguarde ate que os pods do MetalLB estejam prontos.
+
+```
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+```
+
+- Para realizar a configuração do cluster, executar o comando:
 
 ```
 $ kubectl apply -f .\k8s\
 ```
-
-- Para iniciar o fluxo acesse `http://localhost:4200`
-
-
 
 
 ### Desenvolvedores

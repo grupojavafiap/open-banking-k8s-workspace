@@ -1,76 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-transmitter-consents-api
+spec:
+  selector:
+    app: bank-transmitter-consents-api
+  ports:
+    - port: 3333
+      targetPort: 3333
+  type: LoadBalancer
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    io.kompose.service: bank-transmitter-consents-api
   name: bank-transmitter-consents-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      io.kompose.service: bank-transmitter-consents-api
+      app: bank-transmitter-consents-api
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        io.kompose.network/my-networks: "true"
-        io.kompose.service: bank-transmitter-consents-api
+        app: bank-transmitter-consents-api
     spec:
       containers:
-        - args:
-            - npm
-            - run
-            - bank-transmitter-consents-api:dev:docker
+        - name: bank-transmitter-consents-api
+          image: benisson/bank-transmitter-consents-api:0.0.1          
           env:
-            - name: DEV_PLATFORM
-              value: DOCKER
-          image: luquinhasribeiro/open-banking-workspace-main_bank-transmitter-consents-api:latest
-          name: bank-transmitter-consents-api
+            - name: BACK_TRANSMITTER_DB_CONSENT_USER
+              value: bank-transmitter-consent-db-user
+            - name: BACK_TRANSMITTER_DB_CONSENT_PASS
+              value: bank-transmitter-consent-db-pass
+            - name: BACK_TRANSMITTER_DB_CONSENT_PORT
+              value: "3308"
+            - name: BACK_TRANSMITTER_DB_CONSENT_HOST
+              value: bank-transmitter-consent-db
+            - name: BACK_TRANSMITTER_DB_CONSENT_NAME
+              value: bank-transmitter-consent-db
+            - name: KEY_JWS
+              value: "@key_pass#"
           ports:
             - containerPort: 3333
-          resources: {}
-          volumeMounts:
-            - mountPath: /app
-              name: bank-transmitter-consents-api-claim0
       restartPolicy: Always
-      volumes:
-        - name: bank-transmitter-consents-api-claim0
-          persistentVolumeClaim:
-            claimName: bank-transmitter-consents-api-claim0
-status: {}
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    io.kompose.service: bank-transmitter-consents-api
-  name: bank-transmitter-consents-api
-spec:
-  ports:
-    - name: "3333"
-      port: 3333
-      targetPort: 3333
-  selector:
-    io.kompose.service: bank-transmitter-consents-api
-status:
-  loadBalancer: {}
-
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  labels:
-    io.kompose.service: bank-transmitter-consents-api-claim0
-  name: bank-transmitter-consents-api-claim0
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
-status: {}
-
